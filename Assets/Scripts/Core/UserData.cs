@@ -19,13 +19,7 @@ public class UserData : SavePlayerPrefs
     public bool isTutorial = false;
 
     //Booster
-    public float infiniteHeathTime;
-
-    //Power Up
-    public int undoPower;
-    public int refreshPower;
-    public int spotPower;
-    public int timePower;
+    public float infiniteHeathTime; 
 
     //Task
     public int logedDay;
@@ -48,11 +42,7 @@ public class UserData : SavePlayerPrefs
 
     public List<TaskSO> completedTasks = new(); 
     public List<DailyTaskSO> completedDailyTasks = new();
-
-    //Chest Gift
-    public int chestStarIndex;
-    public int chestLevelIndex;
-
+     
     //Settings
     public bool soundOn;
     public bool musicOn;
