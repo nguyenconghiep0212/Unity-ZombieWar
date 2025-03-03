@@ -8,10 +8,17 @@ public class UserData : SavePlayerPrefs
     //Stats
     public string name;
     public int level;
-    public int wisdom;
-    public int health;
+
+    public int energy;
     public int coin;
-    public int star;
+    public int upgradePoint;
+    public int dollar;
+
+    //In-Game Data
+    public List<Rooster> currentRoosters = new List<Rooster>();
+    public List<Rooster> purchasedRoosters = new List<Rooster>();
+    public List<Rooster> unlockedRoosters = new List<Rooster>();
+    public List<Rooster> totalRoosters = new List<Rooster>();
 
     public string lastExitTime;
 
@@ -19,7 +26,7 @@ public class UserData : SavePlayerPrefs
     public bool isTutorial = false;
 
     //Booster
-    public float infiniteHeathTime; 
+    public float infiniteHeathTime;
 
     //Task
     public int logedDay;
@@ -40,9 +47,9 @@ public class UserData : SavePlayerPrefs
     public int usedSpotPowerToday;
     public int usedTimePowerToday;
 
-    public List<TaskSO> completedTasks = new(); 
+    public List<TaskSO> completedTasks = new();
     public List<DailyTaskSO> completedDailyTasks = new();
-     
+
     //Settings
     public bool soundOn;
     public bool musicOn;
@@ -50,11 +57,21 @@ public class UserData : SavePlayerPrefs
     public void Init()
     {
         name = "You";
-        health = 5;
+        energy = 5;
         logedDay = 1;
         continuousLogedDay = 1;
         ResetDailyTask();
+        SetDefaultData();
         firstOpen = false;
+    }
+
+    public void SetDefaultData() 
+    {
+        GameManager.Instance.totalRoosterSO.totalRoosters[0].isPurchased = true;
+        GameManager.Instance.totalRoosterSO.totalRoosters[0].isUnlocked = true;
+
+        purchasedRoosters.Add(GameManager.Instance.totalRoosterSO.totalRoosters[0]);
+        unlockedRoosters.Add(GameManager.Instance.totalRoosterSO.totalRoosters[0]);
     }
 
     public void CheckLogin()
@@ -65,7 +82,7 @@ public class UserData : SavePlayerPrefs
             DateTime now = DateTime.Now;
             DateTime today = now.Date;
             DateTime lastExitDate = lastExitDateTime.Date;
-           
+
             Debug.Log(lastExitDateTime.ToString());
             Debug.Log(now.ToString());
 
@@ -109,10 +126,8 @@ public class UserData : SavePlayerPrefs
     }
 
     public void AddCoin(int coin) { this.coin += coin; }
-    public void AddBalloon(int balloon) { this.balloonMatched += balloon; }
-    public void AddStar(int star) { this.star += star; }
 
-    public void AddHeath(int heart) { this.health += heart; }
+    public void AddEnergy(int energy) { this.energy += energy; }
 }
 
 [Serializable]
@@ -155,7 +170,7 @@ public class TutorialsData
 
     public bool hasActiceArrow;
 
-   
+
 }
 
 [Serializable]
@@ -171,12 +186,12 @@ public class DataTrackingFirebase
     public List<DataSession> dataMaps =
     new List<DataSession> { new DataSession(), new DataSession(), new DataSession(), new DataSession(), new DataSession(), new DataSession() };
 
-   public int currentDataSession = 0;
+    public int currentDataSession = 0;
     public List<DataSession> dataSessionS =
-   new List<DataSession> { new DataSession(), new DataSession(), new DataSession(), new DataSession(), new DataSession()};
+   new List<DataSession> { new DataSession(), new DataSession(), new DataSession(), new DataSession(), new DataSession() };
 
 
-   
+
 }
 
 [Serializable]
@@ -186,7 +201,7 @@ public class DataSession
     public bool completed;
     public bool status;
 
-    public DataSession(float minutes=0, bool completed=false, bool status=false)
+    public DataSession(float minutes = 0, bool completed = false, bool status = false)
     {
         this.minutes = minutes;
         this.completed = completed;

@@ -10,6 +10,9 @@ public class GameManager : Singleton<GameManager>
     {
         get; private set;
     }
+    [SerializeField] internal TotalRoosterSO totalRoosterSO;
+    [SerializeField] internal RegionSO regionSO;
+    [SerializeField] internal LevelSO levelSO;
     protected override void Awake()
     {
         base.Awake();
@@ -35,16 +38,7 @@ public class GameManager : Singleton<GameManager>
 
         //GameUI.Instance.EnableAllSliderElement();
     }
-    public Action onActionChangeStar;
-    public void SetStarUser(int value)
-    {
-        userData.star = value;
-        onActionChangeStar?.Invoke();
-    }
-    public int GetStarUser()
-    {
-        return userData.star;
-    }
+ 
 
     void Update()
     {
@@ -82,12 +76,9 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameStates.Pause:
                 break;
-            case GameStates.Win:
-                userData.level++;
-                userData.levelToday++;
+            case GameStates.Win: 
                 break;
-            case GameStates.Lose:
-                userData.health--;
+            case GameStates.Lose: 
                 break;
             default:
                 break;
@@ -129,9 +120,9 @@ public class GameManager : Singleton<GameManager>
     }
      
 
-    public void AddHear(int heart)
+    public void AddHear(int energy)
     {
-        userData.AddHeath(heart);
+        userData.AddEnergy(energy);
     }
 
     public void ChangePlayerName(string name)

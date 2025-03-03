@@ -55,8 +55,7 @@ public class TaskSO : ScriptableObject
             case TaskType.LoginRegulary:
                 progress = userData.continuousLogedDay;
                 break;
-            case TaskType.GainWisdom:
-                progress = userData.wisdom;
+            case TaskType.GainWisdom: 
                 break;
             case TaskType.CompleteLevel:
                 progress = userData.level;
