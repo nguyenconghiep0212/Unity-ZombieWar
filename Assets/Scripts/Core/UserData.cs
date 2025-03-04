@@ -8,11 +8,20 @@ public class UserData : SavePlayerPrefs
     //Stats
     public string name;
     public int level;
-
+     
     public int energy;
+    public int maxEnergy = 20;
     public int coin;
     public int upgradePoint;
     public int dollar;
+
+    //Player Booster Cards 
+
+    //Player Base
+    public float baseAttack;
+    public int baseHealth;
+    public int baseCardNum;
+
 
     //In-Game Data
     public List<Rooster> currentRoosters = new List<Rooster>();
@@ -24,9 +33,6 @@ public class UserData : SavePlayerPrefs
 
     public bool firstOpen = true;
     public bool isTutorial = false;
-
-    //Booster
-    public float infiniteHeathTime;
 
     //Task
     public int logedDay;
@@ -57,7 +63,7 @@ public class UserData : SavePlayerPrefs
     public void Init()
     {
         name = "You";
-        energy = 5;
+
         logedDay = 1;
         continuousLogedDay = 1;
         ResetDailyTask();
@@ -67,6 +73,9 @@ public class UserData : SavePlayerPrefs
 
     public void SetDefaultData() 
     {
+        baseHealth = 20;
+        energy = maxEnergy;
+
         GameManager.Instance.totalRoosterSO.totalRoosters[0].isPurchased = true;
         GameManager.Instance.totalRoosterSO.totalRoosters[0].isUnlocked = true;
 

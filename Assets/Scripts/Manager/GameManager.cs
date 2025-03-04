@@ -13,6 +13,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] internal TotalRoosterSO totalRoosterSO;
     [SerializeField] internal RegionSO regionSO;
     [SerializeField] internal LevelSO levelSO;
+
+    [SerializeField] internal PlayerBase playerBase;
     protected override void Awake()
     {
         base.Awake();
