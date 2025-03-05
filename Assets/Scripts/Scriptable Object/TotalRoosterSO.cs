@@ -11,6 +11,8 @@ public class TotalRoosterSO : ScriptableObject
 [System.Serializable]
 public class Rooster
 {
+    public int foodCost;
+    public Sprite Icon;
     public Unit unit;
     public bool isUsed;
     public bool isUnlocked;

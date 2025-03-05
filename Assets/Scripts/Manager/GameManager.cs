@@ -10,11 +10,17 @@ public class GameManager : Singleton<GameManager>
     {
         get; private set;
     }
+
+    [Header("SO")]
     [SerializeField] internal TotalRoosterSO totalRoosterSO;
     [SerializeField] internal RegionSO regionSO;
     [SerializeField] internal LevelSO levelSO;
 
+    [Header("In-Level Data")]
     [SerializeField] internal PlayerBase playerBase;
+
+    [Header("Prefab")]
+    [SerializeField] internal RoosterCard roosterCardPrefab;
     protected override void Awake()
     {
         base.Awake();

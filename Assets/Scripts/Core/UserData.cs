@@ -8,8 +8,8 @@ public class UserData : SavePlayerPrefs
     //Stats
     public string name;
     public int level;
-     
-    public int energy;
+
+    public int energy; // ENERGY PLAYER SPEND TO PLAY 1 LEVEL
     public int maxEnergy = 20;
     public int coin;
     public int upgradePoint;
@@ -17,17 +17,21 @@ public class UserData : SavePlayerPrefs
 
     //Player Booster Cards 
 
-    //Player Base
+    //PlayerBase
     public float baseAttack;
     public int baseHealth;
     public int baseCardNum;
+    public float defaultFoodGenerationRate = 1;
+    public float defaultGearGenerationRate = 0.1f;
+    public float foodGenerationRate; // FOOD TO BUY UNIT
+    public float gearGenerationRate; // GEAR TO BUY SPECIAL ATTACK
+    public float maxFood = 100;
+    public float maxGear = 100;
 
-
-    //In-Game Data
+    //Player Data
     public List<Rooster> currentRoosters = new List<Rooster>();
     public List<Rooster> purchasedRoosters = new List<Rooster>();
     public List<Rooster> unlockedRoosters = new List<Rooster>();
-    public List<Rooster> totalRoosters = new List<Rooster>();
 
     public string lastExitTime;
 
@@ -71,14 +75,18 @@ public class UserData : SavePlayerPrefs
         firstOpen = false;
     }
 
-    public void SetDefaultData() 
+    public void SetDefaultData()
     {
+        foodGenerationRate = defaultFoodGenerationRate;
+        gearGenerationRate = defaultGearGenerationRate;
+
         baseHealth = 20;
         energy = maxEnergy;
 
         GameManager.Instance.totalRoosterSO.totalRoosters[0].isPurchased = true;
         GameManager.Instance.totalRoosterSO.totalRoosters[0].isUnlocked = true;
 
+        currentRoosters.Add(GameManager.Instance.totalRoosterSO.totalRoosters[0]);
         purchasedRoosters.Add(GameManager.Instance.totalRoosterSO.totalRoosters[0]);
         unlockedRoosters.Add(GameManager.Instance.totalRoosterSO.totalRoosters[0]);
     }

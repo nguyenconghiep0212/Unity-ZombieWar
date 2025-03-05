@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class EnemyMamanger : Singleton<EnemyMamanger>
 {
@@ -82,5 +83,18 @@ public class EnemyMamanger : Singleton<EnemyMamanger>
             }
 
         }
+    }
+
+    public void FlushEnemyTarget()
+    {
+        foreach (Unit unit in totalUnits)
+        {
+            unit.targets.RemoveAll(item => item == null || item.isDead);
+            unit.targetsInRange.RemoveAll(item => item == null || item.isDead);
+        }
+    }
+    public void KillThisUnit(Unit unitToKill)
+    {
+        totalUnits.Remove(unitToKill);
     }
 }

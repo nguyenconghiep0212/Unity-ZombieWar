@@ -8,17 +8,62 @@ using static UnityEngine.GraphicsBuffer;
 public class Unit_Melee : Unit
 {
     Coroutine coroutineMovement;
+    internal Unit_Melee_StateManager unitMeleeStateManager;
+
     private void Start()
     {
+        unitMeleeStateManager = GetComponent<Unit_Melee_StateManager>();
         animator = GetComponent<Animator>();
     }
-    public void InitUnit()
+
+    private void Update()
     {
-        targetPosition = GameManager.Instance.playerBase.transform.position;
+        if (isDead)
+        {
+            Die();
+        }
     }
 
+    public void InitUnit()
+    {
+        CheckTargetToAttack();
+    }
+
+    #region ---- || MOVE || ----
+    public void CheckTargetToAttack()
+    {
+        FlushTargetList();
+        if (targetsInRange.Count > 0)
+        {
+            for (int i = 0; i < targetsInRange.Count; i++)
+            {
+                if (targets.Count == numOfTarget)
+                {
+                    break;
+                }
+                targets.Add(targetsInRange[i]);
+            }
+            foreach (Unit target in targets)
+            {
+                if (targetsInRange.Contains(target))
+                    targetsInRange.Remove(target);
+            }
+            targetPosition = targets[0].transform.position;
+        }
+        else
+        {
+            if (isEnemy)
+                targetPosition = GameManager.Instance.playerBase.transform.position;
+            else
+                targetPosition = PlayerManager.Instance.holdingLine.position;
+        }
+
+        ChangeTargetPosition();
+    }
     public void InitMovement()
     {
+        StopMoving();
+
         float distance = Vector3.Distance(transform.position, targetPosition);
         float duration = distance / moveSpeed;
         if (transform.position.x > targetPosition.x)
@@ -39,6 +84,10 @@ public class Unit_Melee : Unit
 
             while (elapsedTime < duration)
             {
+                if (!isMoving)
+                {
+                    break;
+                }
                 transform.position = Vector3.Lerp(startPosition, target, (elapsedTime / duration));
                 elapsedTime += Time.deltaTime;
                 yield return null;
@@ -48,25 +97,68 @@ public class Unit_Melee : Unit
     }
     public void ChangeTargetPosition()
     {
+        StopMoving();
+        InitMovement();
+    }
+
+    public void StopMoving()
+    {
+        isMoving = false;
         if (coroutineMovement != null)
         {
             StopCoroutine(coroutineMovement);
             coroutineMovement = null;
         }
-
-        targetPosition = targets[0].transform.position;
     }
+    #endregion
 
-
-    public virtual void TakeDamage(float damageTaken)
+    #region ---- || ATTACK || ----
+    public void Attack()
     {
-        health -= damageTaken;
+        StopMoving();
+
+        StartCoroutine(AttackCoroutine());
+        IEnumerator AttackCoroutine()
+        {
+            yield return new WaitForSeconds(delayPerAttack);
+            animator.SetTrigger("Attack");
+        }
     }
-
-    public virtual void Death()
+    public void DealDamage()
     {
+        foreach (Unit unit in targets)
+        {
+            unit.TakeDamage(damage);
+            if (unit.health <= 0)
+            {
+                unit.Death();
+            }
+        }
+        FlushTargetList();
+        FinishAttack();
+    }
+    public void FinishAttack()
+    {
+        unitMeleeStateManager.ChangeState(unitMeleeStateManager.idleState);
+    }
+    #endregion
+    void FlushTargetList()
+    {
+        if (isEnemy)
+            EnemyMamanger.Instance.FlushEnemyTarget();
+        else
+            PlayerManager.Instance.FlushUnitTarget();
+    }
+    public void Die()
+    {
+        if (isEnemy)
+            EnemyMamanger.Instance.KillThisUnit(this);
+        else
+            PlayerManager.Instance.KillThisUnit(this);
+
         StopAllCoroutines();
         coroutineMovement = null;
+
         Destroy(gameObject);
     }
 
@@ -74,12 +166,27 @@ public class Unit_Melee : Unit
     {
         if (collision != null && collision.GetComponent<Unit>())
         {
-            if (!collision.GetComponent<Unit>().isEnemy)
+
+            if (isEnemy)
             {
-                if (targets.Count < numOfTarget)
+                if (!collision.GetComponent<Unit>().isEnemy)
                 {
-                    targets.Add(collision.gameObject.GetComponent<Unit>());
-                    ChangeTargetPosition();
+                    if (!targetsInRange.Contains(collision.GetComponent<Unit>()))
+                    {
+                        targetsInRange.Add(collision.gameObject.GetComponent<Unit>());
+                        CheckTargetToAttack();
+                    }
+                }
+            }
+            else
+            {
+                if (collision.GetComponent<Unit>().isEnemy)
+                {
+                    if (!targetsInRange.Contains(collision.GetComponent<Unit>()))
+                    {
+                        targetsInRange.Add(collision.gameObject.GetComponent<Unit>());
+                        CheckTargetToAttack();
+                    }
                 }
             }
         }

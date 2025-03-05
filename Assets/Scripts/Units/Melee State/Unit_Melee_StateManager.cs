@@ -36,6 +36,7 @@ public class Unit_Melee_StateManager : MonoBehaviour
     {
         if (state != curentState)
         {
+            curentState.ExitState(this);
             curentState = state;
             state.EnterState(this);
         }
