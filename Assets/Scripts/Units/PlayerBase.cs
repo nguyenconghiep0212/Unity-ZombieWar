@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
+    [SerializeField] internal Transform spawnPoint;
     public int Health
     {
         get { return GameManager.Instance.userData.baseHealth; }

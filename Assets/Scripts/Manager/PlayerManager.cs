@@ -6,10 +6,12 @@ using UnityEngine;
 public class PlayerManager : Singleton<PlayerManager>
 {
     [SerializeField] internal Transform holdingLine;
-
+    [SerializeField] internal PlayerBase playerBase;
 
     public float food = 10;
     public float gear = 5;
+    public float maxFood = 100;
+    public float maxGear = 100;
 
     public float foodGenerationRate
     {
@@ -29,6 +31,9 @@ public class PlayerManager : Singleton<PlayerManager>
     void Start()
     {
         GameUI.Instance.Get<UI_InGame>().Show();
+        GameUI.Instance.Get<UI_InGame>().UpdateFoodDisplay(food);
+        GameUI.Instance.Get<UI_InGame>().UpdateGearDisplay(gear);
+
         InitRooster();
 
         InitFoodGeneration();
@@ -46,12 +51,14 @@ public class PlayerManager : Singleton<PlayerManager>
         foodCoroutine = StartCoroutine(FoodGeneration());
         IEnumerator FoodGeneration()
         {
-            while (food < GameManager.Instance.userData.maxFood)
+            while (food < maxFood)
             {
                 yield return new WaitForSeconds(1);
                 food += foodGenerationRate;
+                GameUI.Instance.Get<UI_InGame>().UpdateFoodDisplay(food);
             }
-            food = GameManager.Instance.userData.maxFood;
+            food = maxFood;
+            GameUI.Instance.Get<UI_InGame>().UpdateFoodDisplay(food);
         }
 
     }
@@ -60,12 +67,14 @@ public class PlayerManager : Singleton<PlayerManager>
         gearCoroutine = StartCoroutine(InitGearGeneration());
         IEnumerator InitGearGeneration()
         {
-            while (gear < GameManager.Instance.userData.maxGear)
+            while (gear < maxGear)
             {
                 yield return new WaitForSeconds(1);
                 gear += gearGenerationRate;
+                GameUI.Instance.Get<UI_InGame>().UpdateGearDisplay(gear);
             }
-            gear = GameManager.Instance.userData.maxGear;
+            gear = maxGear;
+            GameUI.Instance.Get<UI_InGame>().UpdateGearDisplay(gear);
         }
     }
 
@@ -78,10 +87,12 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         if (food > selectedRooster.foodCost)
         {
-            Unit newUnit = Instantiate(selectedRooster.unit, transform);
-            totalUnits.Add(newUnit);
 
+            Unit newUnit = Instantiate(selectedRooster.unit, transform);
+            newUnit.transform.position = playerBase.spawnPoint.transform.position;
+            totalUnits.Add(newUnit);
             food -= selectedRooster.foodCost;
+            GameUI.Instance.Get<UI_InGame>().UpdateFoodDisplay(food);
         }
     }
 

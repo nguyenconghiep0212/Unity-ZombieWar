@@ -12,12 +12,12 @@ public class Unit_Melee_AttackState : Unit_Melee_BaseState
 
     public override void UpdateState(Unit_Melee_StateManager unit)
     {
-      
-            if (unit.unitBehaviour.targets.Count == 0)
-            {
-                unit.ChangeState(unit.idleState);
-            }
-        
+
+        if (unit.unitBehaviour.targets.Count == 0)
+        {
+            unit.ChangeState(unit.idleState);
+        }
+
     }
 
     public override void ExitState(Unit_Melee_StateManager unit)

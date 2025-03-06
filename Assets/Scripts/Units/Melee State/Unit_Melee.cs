@@ -12,6 +12,8 @@ public class Unit_Melee : Unit
 
     private void Start()
     {
+        InitHealthBar();
+        playerBase = PlayerManager.Instance.playerBase;
         unitMeleeStateManager = GetComponent<Unit_Melee_StateManager>();
         animator = GetComponent<Animator>();
     }
@@ -53,7 +55,7 @@ public class Unit_Melee : Unit
         else
         {
             if (isEnemy)
-                targetPosition = GameManager.Instance.playerBase.transform.position;
+                targetPosition = playerBase.transform.position;
             else
                 targetPosition = PlayerManager.Instance.holdingLine.position;
         }

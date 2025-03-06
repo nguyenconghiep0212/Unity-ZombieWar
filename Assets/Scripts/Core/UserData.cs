@@ -25,8 +25,7 @@ public class UserData : SavePlayerPrefs
     public float defaultGearGenerationRate = 0.1f;
     public float foodGenerationRate; // FOOD TO BUY UNIT
     public float gearGenerationRate; // GEAR TO BUY SPECIAL ATTACK
-    public float maxFood = 100;
-    public float maxGear = 100;
+
 
     //Player Data
     public List<Rooster> currentRoosters = new List<Rooster>();

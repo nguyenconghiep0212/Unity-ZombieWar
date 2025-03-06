@@ -60,7 +60,7 @@ public class GameUI : Singleton<GameUI>
         if (Elements.ContainsKey(type)) return Elements[type] as Element;
         Element prefab = Resources.Load<Element>(FolderPath + type.Name);
         Element element = prefab != null ? Instantiate(prefab) : default;
-        if (element != null) SetParent(element.transform, transform);
+        if (element != null) SetParent(element.transform, GameObject.FindGameObjectWithTag("UI_Parent").transform);
         return element;
     }
     public void Submit(UIElement element)

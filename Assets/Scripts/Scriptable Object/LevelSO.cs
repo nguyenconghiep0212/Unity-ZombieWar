@@ -13,8 +13,12 @@ public class LevelSO : ScriptableObject
 [System.Serializable]
 public class Level
 {
+    public int id;
+    public int energyCost;
     public List<Wave> waves;
     public InGameReward reward;
+    public bool isWon;
+    public int starRating;
 }
 
 [System.Serializable]

@@ -34,10 +34,7 @@ public class Unit_Melee_MoveState : Unit_Melee_BaseState
                 unit.ChangeState(unit.attackState);
             }
         }
-        else
-        {
 
-        }
     }
     public override void ExitState(Unit_Melee_StateManager unit)
     {
